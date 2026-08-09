@@ -4,7 +4,9 @@ import { cn } from "@/lib/utils";
 
 const chipClasses = (selected: boolean) =>
   cn(
-    "inline-flex items-center gap-1.5 rounded-pill border px-3.5 py-1.5 text-sm font-medium transition-all duration-200 ease-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+    // `whitespace-nowrap` + `shrink-0`: without them a flex row squeezes the
+    // chips and breaks labels like "Nature & Wildlife" across three lines.
+    "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-pill border px-4 py-2 text-sm font-medium leading-none transition-all duration-200 ease-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
     selected
       ? "border-transparent bg-primary text-primary-fg shadow-sm"
       : "border-border bg-surface text-muted hover:-translate-y-0.5 hover:border-primary/50 hover:text-text hover:shadow-sm",
