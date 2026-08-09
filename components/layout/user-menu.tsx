@@ -17,7 +17,7 @@ export interface UserMenuProps {
 const links: Record<Role, Array<{ href: string; label: string }>> = {
   photographer: [
     { href: "/app", label: "My library" },
-    { href: "/requests", label: "Requests & hours" },
+    { href: "/app/requests", label: "Requests & hours" },
     { href: "/profile", label: "Edit profile" },
   ],
   nonprofit: [

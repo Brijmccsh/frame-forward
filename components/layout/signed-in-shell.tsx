@@ -9,7 +9,7 @@ const NAV: Record<Role, Array<{ href: string; label: string }>> = {
   photographer: [
     { href: "/app", label: "My library" },
     { href: "/browse", label: "Explore" },
-    { href: "/requests", label: "Requests & hours" },
+    { href: "/app/requests", label: "Requests & hours" },
   ],
   nonprofit: [
     { href: "/browse", label: "Browse" },
@@ -39,7 +39,12 @@ export async function SignedInShell({
     <AppShell
       contained={contained}
       nav={NAV[session.role].map((item) => (
-        <NavLink key={item.href} href={item.href}>
+        <NavLink
+          key={item.href}
+          href={item.href}
+          // /app would otherwise stay active on /app/requests and /app/upload.
+          exact={item.href === "/app"}
+        >
           {item.label}
         </NavLink>
       ))}

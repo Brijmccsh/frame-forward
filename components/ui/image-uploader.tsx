@@ -9,19 +9,28 @@ import {
   uploadImage,
   validateImageFile,
   type StorageBucket,
+  type UploadResult,
 } from "@/lib/storage";
 import { Spinner } from "./spinner";
 
 export interface ImageUploaderProps {
   /** Current public URL, or null. */
   value: string | null;
-  onChange: (url: string | null) => void;
+  /**
+   * Called with the public URL (null when cleared). The second argument
+   * carries the storage object path too, for callers that persist the path
+   * rather than the URL (e.g. `photos.image_path`).
+   */
+  onChange: (url: string | null, result?: UploadResult | null) => void;
   bucket: StorageBucket;
   userId: string;
   label: string;
   hint?: string;
-  /** `avatar` is a small square/circle; `cover` is a wide banner. */
-  shape?: "avatar" | "square" | "cover";
+  /**
+   * `avatar` is a small square/circle, `cover` a wide banner, `photo` a large
+   * drop area that shows the whole uncropped image.
+   */
+  shape?: "avatar" | "square" | "cover" | "photo";
   rounded?: "full" | "md";
   disabled?: boolean;
   className?: string;
@@ -31,6 +40,7 @@ const shapes = {
   avatar: "h-28 w-28",
   square: "aspect-square w-full max-w-[16rem]",
   cover: "aspect-[3/1] w-full",
+  photo: "aspect-[4/3] w-full",
 };
 
 export function ImageUploader({
@@ -76,7 +86,7 @@ export function ImageUploader({
       } = await supabase.auth.getSession();
       if (!session) throw new Error("Your session expired — sign in again.");
 
-      const { publicUrl } = await uploadImage({
+      const result = await uploadImage({
         bucket,
         file,
         userId,
@@ -84,7 +94,7 @@ export function ImageUploader({
         onProgress: setProgress,
         signal: controller.signal,
       });
-      onChange(publicUrl);
+      onChange(result.publicUrl, result);
     } catch (uploadError) {
       if ((uploadError as DOMException)?.name === "AbortError") return;
       setError(
@@ -111,7 +121,7 @@ export function ImageUploader({
 
       <div
         className={cn(
-          shape === "cover"
+          shape === "cover" || shape === "photo"
             ? "w-full"
             : "flex flex-wrap items-center gap-4 sm:flex-nowrap",
         )}
@@ -155,7 +165,7 @@ export function ImageUploader({
               alt=""
               fill
               sizes="(max-width: 768px) 100vw, 640px"
-              className="object-cover"
+              className={shape === "photo" ? "object-contain p-2" : "object-cover"}
             />
           ) : (
             <div className="flex flex-col items-center gap-1.5 px-3 py-4 text-muted">
@@ -170,7 +180,11 @@ export function ImageUploader({
                 />
               </svg>
               <span className="text-xs font-medium">
-                {shape === "cover" ? "Drop a banner or click" : "Add image"}
+                {shape === "cover"
+                  ? "Drop a banner or click"
+                  : shape === "photo"
+                    ? "Drop your photo here, or click to pick one"
+                    : "Add image"}
               </span>
             </div>
           )}
@@ -194,7 +208,8 @@ export function ImageUploader({
         <div
           className={cn(
             "flex flex-col gap-1.5",
-            shape === "cover" && "mt-2 flex-row items-center",
+            (shape === "cover" || shape === "photo") &&
+              "mt-2 flex-row items-center",
           )}
         >
           <div className="flex flex-wrap items-center gap-2">
@@ -210,7 +225,7 @@ export function ImageUploader({
               <button
                 type="button"
                 onClick={() => {
-                  onChange(null);
+                  onChange(null, null);
                   setError(null);
                 }}
                 disabled={disabled || busy}

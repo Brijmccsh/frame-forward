@@ -132,3 +132,31 @@
     text-wrap: pretty;
   }
 }
+
+/* The verification letter is printed to PDF straight from the browser. */
+@media print {
+  @page {
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  /* Keep the letter on light colours even if the viewer is in dark mode. */
+  .dark {
+    color-scheme: light;
+  }
+
+  table {
+    break-inside: auto;
+  }
+  tr {
+    break-inside: avoid;
+    break-after: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+}
