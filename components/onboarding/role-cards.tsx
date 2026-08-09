@@ -45,6 +45,7 @@ export function RoleCards() {
               alt=""
               fill
               sizes="(max-width: 640px) 100vw, 45vw"
+              unoptimized
               className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105"
             />
             <span

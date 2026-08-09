@@ -59,6 +59,7 @@ export function Impact() {
               alt={IMPACT_IMAGE.alt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
+              unoptimized
               className="object-cover"
             />
           </figure>

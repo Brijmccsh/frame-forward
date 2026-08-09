@@ -1,6 +1,10 @@
 /**
- * Local seed photography used on the marketing pages.
- * Files live in /public/seed and are rendered with next/image.
+ * Marketing photography, pre-optimised at build time by
+ * `npm run optimize:seed` (sources live in assets/seed, which is not served).
+ *
+ * These are rendered with `unoptimized` on next/image: they're already the
+ * right size and format, so routing them through the runtime optimizer would
+ * burn CPU and memory to produce the same bytes.
  */
 
 export interface SeedImage {
@@ -10,40 +14,40 @@ export interface SeedImage {
 
 export const HERO_IMAGES: SeedImage[] = [
   {
-    src: "/seed/hero-01-photographer.jpg",
+    src: "/seed/hero-01-photographer.webp",
     alt: "A young photographer framing a shot with a camera",
   },
   {
-    src: "/seed/hero-02-portrait.jpg",
+    src: "/seed/hero-02-portrait.webp",
     alt: "A portrait taken in soft natural light",
   },
   {
-    src: "/seed/hero-03-volunteers.jpg",
+    src: "/seed/hero-03-volunteers.webp",
     alt: "Volunteers working together outdoors",
   },
   {
-    src: "/seed/hero-04-landscape.jpg",
+    src: "/seed/hero-04-landscape.webp",
     alt: "An open landscape at golden hour",
   },
 ];
 
 export const IMPACT_IMAGE: SeedImage = {
-  src: "/seed/impact-community.jpg",
+  src: "/seed/impact-community.webp",
   alt: "People gathered together in their community",
 };
 
 /** Category slug -> representative photo. Keys match `categories.slug`. */
 export const CATEGORY_IMAGES: Record<string, string> = {
-  "nature-wildlife": "/seed/cat-nature-wildlife.jpg",
-  "people-portraits": "/seed/cat-people-portraits.jpg",
-  "community-events": "/seed/cat-community-events.jpg",
-  "urban-architecture": "/seed/cat-urban-architecture.jpg",
-  "animals-pets": "/seed/cat-animals-pets.jpg",
-  "action-sports": "/seed/cat-action-sports.jpg",
-  "food-culture": "/seed/cat-food-culture.jpg",
-  "fine-art": "/seed/cat-fine-art.jpg",
-  "environmental-conservation": "/seed/cat-environmental-conservation.jpg",
-  "volunteering-service": "/seed/cat-volunteering-service.jpg",
+  "nature-wildlife": "/seed/cat-nature-wildlife.webp",
+  "people-portraits": "/seed/cat-people-portraits.webp",
+  "community-events": "/seed/cat-community-events.webp",
+  "urban-architecture": "/seed/cat-urban-architecture.webp",
+  "animals-pets": "/seed/cat-animals-pets.webp",
+  "action-sports": "/seed/cat-action-sports.webp",
+  "food-culture": "/seed/cat-food-culture.webp",
+  "fine-art": "/seed/cat-fine-art.webp",
+  "environmental-conservation": "/seed/cat-environmental-conservation.webp",
+  "volunteering-service": "/seed/cat-volunteering-service.webp",
 };
 
 export const categoryImage = (slug: string): string | null =>

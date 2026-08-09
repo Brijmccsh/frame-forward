@@ -15,6 +15,7 @@ export function ClosingCta() {
               alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 1024px"
+              unoptimized
               className="object-cover"
             />
             <span

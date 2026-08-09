@@ -41,6 +41,7 @@ function Tile({
           fill
           priority={priority}
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 22vw"
+          unoptimized
           className="object-cover transition-transform duration-700 ease-soft group-hover:scale-105"
         />
       </figure>
