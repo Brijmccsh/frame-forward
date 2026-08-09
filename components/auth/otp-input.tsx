@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { OTP_LENGTH } from "@/lib/auth/otp";
 
 export interface OtpInputProps {
   value: string;
@@ -20,7 +21,7 @@ export function OtpInput({
   value,
   onChange,
   onComplete,
-  length = 6,
+  length = OTP_LENGTH,
   disabled = false,
   invalid = false,
   label = "One-time code",
@@ -90,7 +91,7 @@ export function OtpInput({
     <div
       role="group"
       aria-label={label}
-      className="flex items-center justify-center gap-2 sm:gap-2.5"
+      className="flex w-full items-center justify-center gap-1.5 sm:gap-2"
     >
       {digits.map((digit, index) => (
         <input
@@ -118,7 +119,8 @@ export function OtpInput({
           }}
           onFocus={(event) => event.currentTarget.select()}
           className={cn(
-            "h-14 w-11 rounded-md border bg-surface text-center font-head text-2xl font-semibold text-text shadow-xs transition-all duration-200 ease-soft sm:h-16 sm:w-12",
+            // Widths flex so 6, 8 or 10 boxes all fit the card.
+            "h-12 w-full min-w-0 max-w-[3rem] rounded-md border bg-surface text-center font-head text-xl font-semibold text-text shadow-xs transition-all duration-200 ease-soft sm:h-14 sm:text-2xl",
             "focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/40",
             "disabled:cursor-not-allowed disabled:opacity-60",
             invalid

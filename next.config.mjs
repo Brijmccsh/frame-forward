@@ -15,6 +15,13 @@ const nextConfig = {
         ]
       : [],
   },
+  async rewrites() {
+    return [
+      // The brand mark lives at app/icon.png; clients that request the
+      // conventional /favicon.ico path get the same image.
+      { source: "/favicon.ico", destination: "/icon.png" },
+    ];
+  },
 };
 
 export default nextConfig;

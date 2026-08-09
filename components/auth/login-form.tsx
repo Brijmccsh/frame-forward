@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { OtpInput } from "./otp-input";
 import { requestLoginCode, verifyLoginCode } from "@/lib/auth/actions";
+import { OTP_LENGTH } from "@/lib/auth/otp";
 
 const RESEND_SECONDS = 30;
 
@@ -46,7 +47,7 @@ export function LoginForm({ next }: { next?: string }) {
   };
 
   const submitCode = (value: string) => {
-    if (value.length !== 6 || pending) return;
+    if (value.length !== OTP_LENGTH || pending) return;
     // Guard against the auto-submit firing twice for the same code.
     if (verifiedFor.current === value) return;
     verifiedFor.current = value;
@@ -77,8 +78,8 @@ export function LoginForm({ next }: { next?: string }) {
             Welcome in
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Enter your email and we&apos;ll send you a 6-digit code. No password
-            needed — new here or not, this is the way in.
+            Enter your email and we&apos;ll send you a {OTP_LENGTH}-digit code.
+            No password needed — new here or not, this is the way in.
           </p>
 
           <div className="mt-7">
@@ -141,7 +142,7 @@ export function LoginForm({ next }: { next?: string }) {
             Check your email
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            We sent a 6-digit code to{" "}
+            We sent a {OTP_LENGTH}-digit code to{" "}
             <span className="font-semibold text-text">
               {email.trim().toLowerCase()}
             </span>
@@ -158,7 +159,7 @@ export function LoginForm({ next }: { next?: string }) {
               onComplete={submitCode}
               disabled={pending}
               invalid={Boolean(error)}
-              label="6-digit sign-in code"
+              label={`${OTP_LENGTH}-digit sign-in code`}
             />
             <div aria-live="polite" className="min-h-[1.25rem]">
               {error ? (
@@ -174,7 +175,7 @@ export function LoginForm({ next }: { next?: string }) {
             size="lg"
             fullWidth
             loading={pending}
-            disabled={code.length !== 6}
+            disabled={code.length !== OTP_LENGTH}
             className="mt-4"
           >
             {pending ? "Verifying…" : "Verify & continue"}

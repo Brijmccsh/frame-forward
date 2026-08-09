@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LOGIN_PATH, findProfile, homePathFor } from "@/lib/auth";
 import { ROLE_COOKIE, roleCookieOptions } from "@/lib/auth/role-cookie";
+import { OTP_LENGTH, OTP_MAX, OTP_MIN, cleanOtp } from "@/lib/auth/otp";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -28,7 +29,7 @@ function friendlyAuthError(message: string): string {
   return message;
 }
 
-/** Step 1 — email the user a 6-digit code. */
+/** Step 1 — email the user a one-time code. */
 export async function requestLoginCode(
   emailInput: string,
 ): Promise<ActionResult> {
@@ -57,10 +58,16 @@ export async function verifyLoginCode(
   next?: string,
 ): Promise<ActionResult> {
   const email = emailInput.trim().toLowerCase();
-  const token = tokenInput.replace(/\D/g, "");
+  const token = cleanOtp(tokenInput);
 
-  if (token.length !== 6) {
-    return { ok: false, error: "Enter the 6-digit code from your email." };
+  // Range rather than an exact match: if the dashboard's OTP length changes,
+  // Supabase rejects the code with a clear message instead of this form
+  // silently refusing to submit.
+  if (token.length < OTP_MIN || token.length > OTP_MAX) {
+    return {
+      ok: false,
+      error: `Enter the ${OTP_LENGTH}-digit code from your email.`,
+    };
   }
 
   const supabase = createClient();
