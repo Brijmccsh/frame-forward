@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Design tokens.
+ * Values are space-separated RGB channels so Tailwind can apply opacity
+ * modifiers via `rgb(var(--token) / <alpha-value>)`.
+ */
+@layer base {
+  :root {
+    --bg: 250 248 245; /* #FAF8F5 */
+    --surface: 255 255 255; /* #FFFFFF */
+    --surface-2: 242 239 234; /* #F2EFEA */
+    --text: 43 45 51; /* #2B2D33 */
+    --muted: 111 108 119; /* #6F6C77 */
+    --border: 233 228 222; /* #E9E4DE */
+    --primary: 219 133 150; /* #DB8596 */
+    --primary-fg: 43 45 51; /* navy reads AA on pink; white does not */
+    --accent: 111 157 155; /* #6F9D9B */
+    --accent-fg: 255 255 255;
+    --ring: 219 133 150; /* #DB8596 */
+    --danger: 185 74 74;
+    --danger-fg: 255 255 255;
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-pill: 999px;
+
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: 22 23 27; /* #16171B */
+    --surface: 30 32 38; /* #1E2026 */
+    --surface-2: 38 41 50; /* #262932 */
+    --text: 244 242 239; /* #F4F2EF */
+    --muted: 163 160 169; /* #A3A0A9 */
+    --border: 46 49 58; /* #2E313A */
+    --primary: 226 154 168; /* #E29AA8 */
+    --primary-fg: 22 23 27;
+    --accent: 131 178 176; /* #83B2B0 */
+    --accent-fg: 22 23 27;
+    --ring: 226 154 168; /* #E29AA8 */
+    --danger: 226 122 122;
+    --danger-fg: 22 23 27;
+
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg font-body text-text antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-head tracking-tight;
+    font-weight: 600;
+  }
+
+  /* Consistent, visible focus for keyboard users only. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-bg;
+  }
+
+  ::selection {
+    @apply bg-primary/30 text-text;
+  }
+
+  /* Scrollbars that don't fight the theme */
+  * {
+    scrollbar-color: rgb(var(--border)) transparent;
+  }
+  ::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-pill border-4 border-solid border-transparent bg-border bg-clip-padding;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Page gutter used by the shell, hero and every content section. */
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Frosted bar used by the sticky nav. */
+  .glass {
+    @apply bg-bg/80 backdrop-blur-xl backdrop-saturate-150;
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0 after:bg-current after:transition-[width] after:duration-300 after:ease-soft hover:after:w-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
