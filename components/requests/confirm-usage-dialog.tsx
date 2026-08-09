@@ -7,7 +7,23 @@ import { Chip } from "@/components/ui/chip";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { confirmUsage } from "@/lib/requests/actions";
-import { USE_TYPES, USE_TYPE_EMOJI } from "@/lib/requests/use-types";
+import {
+  FileText,
+  Globe,
+  Mail,
+  Megaphone,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react";
+import { USE_TYPES, type UseType } from "@/lib/requests/use-types";
+
+const USE_TYPE_ICONS: Record<UseType, LucideIcon> = {
+  "Social post": Smartphone,
+  Newsletter: Mail,
+  Website: Globe,
+  Flyer: FileText,
+  Campaign: Megaphone,
+};
 
 /** "Confirm we used this" — picks a use type and credits the photographer. */
 export function ConfirmUsageDialog({
@@ -44,7 +60,7 @@ export function ConfirmUsageDialog({
       }
       onClose();
       success(
-        "Thank you! 🎉",
+        "Thank you!",
         `${photographerName ?? "The photographer"} just earned ${hoursPerPhoto} service hours.`,
       );
       router.refresh();
@@ -82,7 +98,10 @@ export function ConfirmUsageDialog({
           {USE_TYPES.map((type) => (
             <Chip
               key={type}
-              emoji={USE_TYPE_EMOJI[type]}
+              icon={(() => {
+                const TypeIcon = USE_TYPE_ICONS[type];
+                return <TypeIcon className="h-3.5 w-3.5" />;
+              })()}
               selected={useType === type}
               onClick={() => setUseType(type)}
               data-autofocus={type === USE_TYPES[0] ? "" : undefined}

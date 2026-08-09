@@ -18,7 +18,7 @@ export function CategoryFilter({
     <nav aria-label="Filter by category">
       <ul className="flex snap-x gap-2 overflow-x-auto pb-1">
         <li className="snap-start">
-          <ChipLink href={basePath} selected={!activeSlug} emoji="✨">
+          <ChipLink href={basePath} selected={!activeSlug}>
             All
           </ChipLink>
         </li>
@@ -27,7 +27,6 @@ export function CategoryFilter({
             <ChipLink
               href={`${basePath}?category=${category.slug}`}
               selected={activeSlug === category.slug}
-              emoji={category.emoji}
             >
               {category.name}
             </ChipLink>

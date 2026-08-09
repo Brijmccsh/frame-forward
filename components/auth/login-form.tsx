@@ -74,7 +74,7 @@ export function LoginForm({ next }: { next?: string }) {
           noValidate
         >
           <h1 className="font-head text-2xl font-bold text-text sm:text-3xl">
-            Welcome in 👋
+            Welcome in
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Enter your email and we&apos;ll send you a 6-digit code. No password
@@ -138,7 +138,7 @@ export function LoginForm({ next }: { next?: string }) {
           noValidate
         >
           <h1 className="font-head text-2xl font-bold text-text sm:text-3xl">
-            Check your email 📬
+            Check your email
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-muted">
             We sent a 6-digit code to{" "}

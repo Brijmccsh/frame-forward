@@ -13,13 +13,13 @@ const chipClasses = (selected: boolean) =>
 export interface ChipProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
-  emoji?: string | null;
+  icon?: React.ReactNode;
 }
 
 /** Selectable pill — used for category filters. */
 export function Chip({
   selected = false,
-  emoji,
+  icon,
   className,
   children,
   type = "button",
@@ -32,9 +32,9 @@ export function Chip({
       className={cn(chipClasses(selected), className)}
       {...props}
     >
-      {emoji ? (
-        <span aria-hidden className="text-base leading-none">
-          {emoji}
+      {icon ? (
+        <span aria-hidden className="flex items-center">
+          {icon}
         </span>
       ) : null}
       {children}
@@ -44,7 +44,7 @@ export function Chip({
 
 export interface ChipLinkProps extends LinkProps {
   selected?: boolean;
-  emoji?: string | null;
+  icon?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
 }
@@ -52,7 +52,7 @@ export interface ChipLinkProps extends LinkProps {
 /** Same look as `Chip`, but navigates — for URL-driven filters. */
 export function ChipLink({
   selected = false,
-  emoji,
+  icon,
   className,
   children,
   ...props
@@ -63,9 +63,9 @@ export function ChipLink({
       className={cn(chipClasses(selected), className)}
       {...props}
     >
-      {emoji ? (
-        <span aria-hidden className="text-base leading-none">
-          {emoji}
+      {icon ? (
+        <span aria-hidden className="flex items-center">
+          {icon}
         </span>
       ) : null}
       {children}

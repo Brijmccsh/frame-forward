@@ -1,3 +1,4 @@
+import { Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { NonprofitRequests } from "@/components/requests/nonprofit-requests";
@@ -36,7 +37,7 @@ export default async function RequestsPage() {
 
       {confirmed.length ? (
         <p className="mt-4 inline-flex items-center gap-2 rounded-pill border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-sm font-medium text-accent-ink">
-          <span aria-hidden>🎉</span>
+          <Sparkles aria-hidden className="h-4 w-4" />
           You&apos;ve credited{" "}
           {confirmed.reduce(
             (total, request) => total + Number(request.hours_awarded ?? 0),

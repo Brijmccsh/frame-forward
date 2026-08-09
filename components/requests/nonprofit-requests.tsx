@@ -1,5 +1,6 @@
 "use client";
 
+import { Heart, Send } from "lucide-react";
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -77,7 +78,7 @@ export function NonprofitRequests({
               </div>
             ) : (
               <EmptyState
-                emoji="💌"
+                icon={Send}
                 title="No requests yet"
                 description="Find a photo you love in Browse and hit “Request to use”. You'll get the photographer's email right away."
                 action={<ButtonLink href="/browse">Browse photos</ButtonLink>}
@@ -87,7 +88,7 @@ export function NonprofitRequests({
             <SavedGrid saved={saved} />
           ) : (
             <EmptyState
-              emoji="♥"
+              icon={Heart}
               title="Your shortlist is empty"
               description="Tap the heart on any photo to keep it here while you decide."
               action={<ButtonLink href="/browse">Browse photos</ButtonLink>}

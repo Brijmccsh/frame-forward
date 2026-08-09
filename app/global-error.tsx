@@ -29,7 +29,6 @@ export default function GlobalError({
         }}
       >
         <div style={{ maxWidth: "28rem" }}>
-          <p style={{ fontSize: "2.5rem", margin: 0 }}>🫠</p>
           <h1 style={{ fontSize: "1.5rem", margin: "1rem 0 0.5rem" }}>
             Frame Forward hit a snag
           </h1>

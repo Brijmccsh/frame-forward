@@ -63,7 +63,7 @@ export function ContactDialog({
     <Modal
       open={open}
       onClose={onClose}
-      title={alreadyRequested ? "You've already asked 👋" : "Request sent 🎉"}
+      title={alreadyRequested ? "You've already asked" : "Request sent"}
       description={
         alreadyRequested
           ? "This one's already in My requests. Here are the photographer's details again."

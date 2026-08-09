@@ -1,3 +1,4 @@
+import { Camera, Globe, Images, PencilLine } from "lucide-react";
 import type { Metadata } from "next";
 import { PhotoManageCard } from "@/components/photos/photo-manage-card";
 import { ButtonLink } from "@/components/ui/button";
@@ -24,7 +25,7 @@ export default async function LibraryPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-head text-3xl font-bold text-text sm:text-4xl">
-            {firstName ? `Hey, ${firstName}` : "Your library"} 👋
+            {firstName ? `Hey, ${firstName}` : "Your library"}
           </h1>
           <p className="mt-2 text-muted">
             Everything you&apos;ve uploaded, published or not.
@@ -47,16 +48,16 @@ export default async function LibraryPage() {
       {photos.length ? (
         <>
           <StatRow className="mt-8">
-            <Stat emoji="🖼️" label="Photos" value={photos.length} />
+            <Stat icon={Images} label="Photos" value={photos.length} />
             <Stat
-              emoji="🌍"
+              icon={Globe}
               label="Published"
               value={published}
               hint="Visible to nonprofits in Browse"
               tone="accent"
             />
             <Stat
-              emoji="✏️"
+              icon={PencilLine}
               label="Drafts"
               value={photos.length - published}
               hint="Only you can see these"
@@ -74,7 +75,7 @@ export default async function LibraryPage() {
       ) : (
         <EmptyState
           className="mt-10"
-          emoji="📷"
+          icon={Camera}
           title="Your library is waiting"
           description="Upload your first photo and it goes straight into the library nonprofits browse. Every one they use earns you service hours."
           action={

@@ -137,7 +137,6 @@ export function PhotoLightbox({
         <aside className="shrink-0 overflow-y-auto rounded-lg border border-border bg-surface p-5 lg:w-80">
           {photo.category ? (
             <span className="inline-flex items-center gap-1.5 rounded-pill bg-surface-2 px-2.5 py-1 text-2xs font-semibold uppercase tracking-wide text-muted">
-              <span aria-hidden>{photo.category.emoji}</span>
               {photo.category.name}
             </span>
           ) : null}

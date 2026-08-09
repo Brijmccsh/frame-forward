@@ -1,3 +1,4 @@
+import { FolderOpen } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { UploadForm } from "@/components/photos/upload-form";
@@ -43,7 +44,7 @@ export default async function UploadPage() {
           <UploadForm userId={profile.id} categories={categories} />
         ) : (
           <EmptyState
-            emoji="🗂️"
+            icon={FolderOpen}
             title="No categories available"
             description="Categories haven't loaded. Refresh the page, and if it keeps happening let an admin know."
           />

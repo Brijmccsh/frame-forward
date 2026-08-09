@@ -1,15 +1,16 @@
 import type { ReactNode } from "react";
+import { ImageOff, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /** Friendly placeholder for empty lists and not-yet-built sections. */
 export function EmptyState({
-  emoji = "✨",
+  icon: Icon = ImageOff,
   title,
   description,
   action,
   className,
 }: {
-  emoji?: string;
+  icon?: LucideIcon;
   title: string;
   description?: ReactNode;
   action?: ReactNode;
@@ -18,15 +19,15 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center rounded-lg border border-dashed border-border bg-surface/60 px-6 py-14 text-center",
+        "flex flex-col items-center rounded-xl border border-dashed border-border bg-surface/60 px-6 py-16 text-center",
         className,
       )}
     >
       <span
         aria-hidden
-        className="mb-4 flex h-16 w-16 items-center justify-center rounded-pill bg-surface-2 text-3xl"
+        className="mb-5 flex h-14 w-14 items-center justify-center rounded-pill bg-surface-2 text-muted"
       >
-        {emoji}
+        <Icon className="h-6 w-6" />
       </span>
       <h2 className="font-head text-xl font-semibold text-text">{title}</h2>
       {description ? (
@@ -34,7 +35,7 @@ export function EmptyState({
           {description}
         </p>
       ) : null}
-      {action ? <div className="mt-6">{action}</div> : null}
+      {action ? <div className="mt-7">{action}</div> : null}
     </div>
   );
 }

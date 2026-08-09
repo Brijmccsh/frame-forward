@@ -55,7 +55,7 @@ export function UploadForm({
       }
 
       success(
-        isPublished ? "Photo published 🎉" : "Saved as a draft",
+        isPublished ? "Photo published" : "Saved as a draft",
         isPublished
           ? "It's live in the library for nonprofits to find."
           : "Publish it whenever you're ready.",

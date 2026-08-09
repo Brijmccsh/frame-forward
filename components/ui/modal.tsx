@@ -22,7 +22,7 @@ export interface ModalProps {
   /** Rendered in a right-aligned row at the bottom. */
   footer?: React.ReactNode;
   size?: keyof typeof widths;
-  /** Hide the ✕ when the modal must be dismissed via an explicit action. */
+  /** Hide the close button when dismissal must be an explicit action. */
   hideCloseButton?: boolean;
   children?: React.ReactNode;
   className?: string;

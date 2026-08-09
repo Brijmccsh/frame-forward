@@ -72,8 +72,7 @@ export function BrowseGallery({ photos, nonprofit }: BrowseGalleryProps) {
                 </button>
 
                 {photo.category ? (
-                  <span className="pointer-events-none absolute left-2 top-2 inline-flex items-center gap-1 rounded-pill bg-bg/85 px-2 py-1 text-2xs font-semibold text-text backdrop-blur">
-                    <span aria-hidden>{photo.category.emoji}</span>
+                  <span className="pointer-events-none absolute left-2 top-2 inline-flex items-center gap-1 rounded-pill bg-bg/85 px-2.5 py-1 text-2xs font-semibold text-text backdrop-blur">
                     {photo.category.name}
                   </span>
                 ) : null}

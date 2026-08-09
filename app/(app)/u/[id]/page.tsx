@@ -1,3 +1,4 @@
+import { Camera } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProfileHeader } from "@/components/profile/profile-header";
@@ -114,7 +115,7 @@ export default async function PublicProfilePage({
                 ) : (
                   <EmptyState
                     className="mt-4"
-                    emoji="📷"
+                    icon={Camera}
                     title="No published photos yet"
                     description={`${name || "This photographer"} hasn't published anything to the library so far.`}
                   />

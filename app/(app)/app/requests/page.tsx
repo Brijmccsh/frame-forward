@@ -1,3 +1,4 @@
+import { Camera, CircleCheck, Clock, Images, Inbox } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,10 +64,10 @@ export default async function PhotographerRequestsPage() {
       </div>
 
       <StatRow className="mt-8">
-        <Stat emoji="🖼️" label="Photos" value={counts.published} hint={`${counts.total} total, ${counts.drafts} drafts`} />
-        <Stat emoji="✅" label="Times used" value={hours.photosUsed} hint="Confirmed by a nonprofit" tone="accent" />
+        <Stat icon={Images} label="Photos" value={counts.published} hint={`${counts.total} total, ${counts.drafts} drafts`} />
+        <Stat icon={CircleCheck} label="Times used" value={hours.photosUsed} hint="Confirmed by a nonprofit" tone="accent" />
         <Stat
-          emoji="⏳"
+          icon={Clock}
           label="Total hours"
           value={formatHours(hours.totalHours)}
           hint="Ready for your service log"
@@ -150,7 +151,7 @@ export default async function PhotographerRequestsPage() {
         ) : (
           <EmptyState
             className="mt-4"
-            emoji="📬"
+            icon={Inbox}
             title="No open requests"
             description="When a nonprofit wants to use one of your photos, it'll show up here with their contact details."
           />
@@ -247,7 +248,7 @@ export default async function PhotographerRequestsPage() {
         ) : (
           <EmptyState
             className="mt-4"
-            emoji="⏳"
+            icon={Clock}
             title="No confirmed uses yet"
             description={`Once a nonprofit confirms they used one of your photos, ${formatHours(hoursPerPhoto)} hours land here — along with a letter you can download.`}
           />

@@ -26,7 +26,6 @@ export function CategoryPicker({
         {categories.map((category) => (
           <Chip
             key={category.id}
-            emoji={category.emoji}
             selected={value === category.id}
             onClick={() => onChange(category.id)}
           >

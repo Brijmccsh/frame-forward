@@ -60,7 +60,7 @@ export function PhotoActions({
         toastError("Couldn't update your shortlist", result.error);
         return;
       }
-      if (result.saved) success("Saved to your shortlist ♥");
+      if (result.saved) success("Saved to your shortlist");
       router.refresh();
     });
   };

@@ -125,14 +125,7 @@ export function PhotoManageCard({
               {photo.title ?? "Untitled"}
             </h3>
             <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
-              {photo.category ? (
-                <>
-                  <span aria-hidden>{photo.category.emoji}</span>
-                  {photo.category.name}
-                </>
-              ) : (
-                "No category"
-              )}
+              {photo.category ? photo.category.name : "No category"}
             </p>
           </div>
 

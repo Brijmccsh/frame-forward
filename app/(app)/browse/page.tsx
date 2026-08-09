@@ -1,3 +1,4 @@
+import { Search, Sprout } from "lucide-react";
 import type { Metadata } from "next";
 import { BrowseGallery } from "@/components/photos/browse-gallery";
 import { CategoryFilter } from "@/components/photos/category-filter";
@@ -40,7 +41,7 @@ export default async function BrowsePage({
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-head text-3xl font-bold text-text sm:text-4xl">
-            {active ? `${active.emoji} ${active.name}` : "Browse photos"}
+            {active ? active.name : "Browse photos"}
           </h1>
           <p className="mt-2 max-w-prose text-pretty text-muted">
             {session.role === "nonprofit"
@@ -81,7 +82,7 @@ export default async function BrowsePage({
           </>
         ) : (
           <EmptyState
-            emoji={active ? (active.emoji ?? "🔍") : "🌱"}
+            icon={active ? Search : Sprout}
             title={
               active
                 ? `Nothing in ${active.name} yet`

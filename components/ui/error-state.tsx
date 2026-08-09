@@ -1,5 +1,6 @@
 "use client";
 
+import { TriangleAlert } from "lucide-react";
 import * as React from "react";
 import { Button } from "./button";
 
@@ -26,9 +27,9 @@ export function ErrorState({
     <div className="flex flex-col items-center rounded-lg border border-dashed border-border bg-surface/60 px-6 py-16 text-center">
       <span
         aria-hidden
-        className="mb-4 flex h-16 w-16 items-center justify-center rounded-pill bg-surface-2 text-3xl"
+        className="mb-5 flex h-14 w-14 items-center justify-center rounded-pill bg-surface-2 text-muted"
       >
-        🫠
+        <TriangleAlert className="h-6 w-6" />
       </span>
       <h1 className="font-head text-2xl font-bold text-text">{title}</h1>
       <p className="mt-2 max-w-sm text-pretty text-sm leading-relaxed text-muted">
