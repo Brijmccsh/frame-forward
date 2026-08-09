@@ -91,9 +91,9 @@ export function PhotoActions({
       className={cn(
         "inline-flex items-center justify-center rounded-pill transition-all duration-200 ease-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-60",
         layout === "overlay"
-          ? "h-9 w-9 bg-bg/85 text-muted shadow-sm backdrop-blur hover:scale-110 hover:text-primary"
-          : "h-11 w-11 border border-border bg-surface text-muted hover:border-primary/50 hover:text-primary",
-        isSaved && "text-primary",
+          ? "h-9 w-9 bg-bg/85 text-muted shadow-sm backdrop-blur hover:scale-110 hover:text-primary-ink"
+          : "h-11 w-11 border border-border bg-surface text-muted hover:border-primary/50 hover:text-primary-ink",
+        isSaved && "text-primary-ink",
       )}
     >
       <svg

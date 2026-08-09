@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { PhotoGrid } from "@/components/photos/photo-grid";
 import { Card } from "@/components/ui/card";
@@ -44,7 +43,7 @@ function Detail({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline text-accent"
+            className="link-underline text-accent-ink"
           >
             {value}
           </a>
@@ -75,7 +74,7 @@ export default async function PublicProfilePage({
     : session.profile.org_name;
 
   return (
-    <SignedInShell>
+    <>
       <ProfileHeader
         role={session.role}
         name={name}
@@ -194,6 +193,6 @@ export default async function PublicProfilePage({
           </Card>
         </aside>
       </div>
-    </SignedInShell>
+    </>
   );
 }

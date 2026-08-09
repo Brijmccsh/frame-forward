@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { PhotographerForm } from "@/components/profile/photographer-form";
 import { NonprofitForm } from "@/components/profile/nonprofit-form";
@@ -14,7 +13,7 @@ export default async function ProfilePage() {
   const name = role === "photographer" ? profile.name : profile.org_name;
 
   return (
-    <SignedInShell>
+    <>
       <ProfileHeader
         role={role}
         name={name}
@@ -50,6 +49,6 @@ export default async function ProfilePage() {
           )}
         </div>
       </div>
-    </SignedInShell>
+    </>
   );
 }

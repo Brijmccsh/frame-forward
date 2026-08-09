@@ -84,7 +84,7 @@ export default async function OnboardingPage({
             </>
           ) : (
             <>
-              <p className="text-xs font-semibold uppercase tracking-widest text-accent">
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent-ink">
                 One quick thing
               </p>
               <h1 className="mt-3 font-head text-4xl font-bold text-text sm:text-5xl">

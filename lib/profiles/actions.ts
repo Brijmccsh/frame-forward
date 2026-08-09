@@ -1,9 +1,11 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { HOME_PATH, findProfile, getUser } from "@/lib/auth";
+import { ROLE_COOKIE, roleCookieOptions } from "@/lib/auth/role-cookie";
 import {
   cleanText,
   normalizeEin,
@@ -83,6 +85,7 @@ export async function createPhotographerProfile(
 
   if (error) return { ok: false, error: friendlyDbError(error.message) };
 
+  cookies().set(ROLE_COOKIE, "photographer", roleCookieOptions);
   revalidatePath("/", "layout");
   redirect(HOME_PATH.photographer);
 }
@@ -113,6 +116,7 @@ export async function createNonprofitProfile(
 
   if (error) return { ok: false, error: friendlyDbError(error.message) };
 
+  cookies().set(ROLE_COOKIE, "nonprofit", roleCookieOptions);
   revalidatePath("/", "layout");
   redirect(HOME_PATH.nonprofit);
 }

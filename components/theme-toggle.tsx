@@ -27,7 +27,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       }
       title={mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : undefined}
       className={cn(
-        "relative inline-flex h-10 w-10 items-center justify-center rounded-pill border border-border bg-surface text-muted transition-all duration-200 ease-soft hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+        "relative inline-flex h-10 w-10 items-center justify-center rounded-pill border border-border bg-surface text-muted transition-all duration-200 ease-soft hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary-ink hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
         className,
       )}
     >

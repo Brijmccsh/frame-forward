@@ -217,7 +217,7 @@ export function ImageUploader({
               type="button"
               onClick={openPicker}
               disabled={disabled || busy}
-              className="rounded-pill border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-text transition-colors hover:border-primary/50 hover:text-primary disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="rounded-pill border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-text transition-colors hover:border-primary/50 hover:text-primary-ink disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {value ? "Replace" : "Upload"}
             </button>

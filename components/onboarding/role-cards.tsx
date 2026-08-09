@@ -48,7 +48,7 @@ export function RoleCards() {
                 <svg
                   viewBox="0 0 20 20"
                   aria-hidden
-                  className="h-4 w-4 shrink-0 text-accent"
+                  className="h-4 w-4 shrink-0 text-accent-ink"
                 >
                   <path
                     d="M4 10.5l4 4 8-8"

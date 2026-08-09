@@ -167,7 +167,7 @@ function RequestRow({
             {photographer.email ? (
               <a
                 href={`mailto:${photographer.email}`}
-                className="link-underline text-accent"
+                className="link-underline text-accent-ink"
               >
                 {photographer.email}
               </a>

@@ -102,7 +102,7 @@ export function Tabs({
                   className={cn(
                     "rounded-pill px-1.5 py-0.5 text-2xs tabular-nums",
                     selected
-                      ? "bg-primary/20 text-primary"
+                      ? "bg-primary/20 text-primary-ink"
                       : "bg-border/70 text-muted",
                   )}
                 >

@@ -5,8 +5,8 @@ type BadgeTone = "neutral" | "primary" | "accent" | "success" | "warning" | "dan
 
 const tones: Record<BadgeTone, string> = {
   neutral: "bg-surface-2 text-muted border-border",
-  primary: "bg-primary/15 text-primary border-primary/25",
-  accent: "bg-accent/15 text-accent border-accent/25",
+  primary: "bg-primary/15 text-primary-ink border-primary/25",
+  accent: "bg-accent/15 text-accent-ink border-accent/25",
   success: "bg-emerald-500/15 text-emerald-700 border-emerald-500/25 dark:text-emerald-300",
   warning: "bg-amber-500/15 text-amber-700 border-amber-500/25 dark:text-amber-300",
   danger: "bg-danger/15 text-danger border-danger/25",

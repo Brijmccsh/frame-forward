@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { NonprofitRequests } from "@/components/requests/nonprofit-requests";
 import { requireProfile } from "@/lib/auth";
 import {
@@ -25,7 +24,7 @@ export default async function RequestsPage() {
   const confirmed = requests.filter((request) => request.status === "used");
 
   return (
-    <SignedInShell>
+    <>
       <h1 className="font-head text-3xl font-bold text-text sm:text-4xl">
         My requests
       </h1>
@@ -36,7 +35,7 @@ export default async function RequestsPage() {
       </p>
 
       {confirmed.length ? (
-        <p className="mt-4 inline-flex items-center gap-2 rounded-pill border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-sm font-medium text-accent">
+        <p className="mt-4 inline-flex items-center gap-2 rounded-pill border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-sm font-medium text-accent-ink">
           <span aria-hidden>🎉</span>
           You&apos;ve credited{" "}
           {confirmed.reduce(
@@ -54,6 +53,6 @@ export default async function RequestsPage() {
           hoursPerPhoto={hoursPerPhoto}
         />
       </div>
-    </SignedInShell>
+    </>
   );
 }

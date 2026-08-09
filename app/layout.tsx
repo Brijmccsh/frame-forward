@@ -3,6 +3,7 @@ import { Figtree, Fraunces } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import { BRAND } from "@/lib/brand";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -17,18 +18,40 @@ const figtree = Figtree({
   variable: "--font-body",
 });
 
+const title = "Frame Forward — Photography that gives back.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: "Frame Forward — Photography that gives back.",
+    default: title,
     template: "%s · Frame Forward",
   },
   description: BRAND.description,
-  icons: { icon: BRAND.logoUrl },
+  applicationName: "Frame Forward",
+  keywords: [
+    "student photography",
+    "nonprofit photos",
+    "community service hours",
+    "free photos for nonprofits",
+    "teen photographers",
+  ],
+  authors: [{ name: "Frame Forward" }],
   openGraph: {
-    title: "Frame Forward — Photography that gives back.",
-    description: BRAND.description,
-    siteName: "Frame Forward",
     type: "website",
+    siteName: "Frame Forward",
+    title,
+    description: BRAND.description,
+    url: "/",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: BRAND.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -37,6 +60,7 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: light)", color: "#FAF8F5" },
     { media: "(prefers-color-scheme: dark)", color: "#16171B" },
   ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({

@@ -20,7 +20,7 @@ export function CategoryPicker({
   return (
     <fieldset disabled={disabled}>
       <legend className="mb-2 text-sm font-medium text-text">
-        Category <span className="text-primary">*</span>
+        Category <span className="text-primary-ink">*</span>
       </legend>
       <div className="flex flex-wrap gap-2">
         {categories.map((category) => (

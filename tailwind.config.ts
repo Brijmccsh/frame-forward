@@ -35,10 +35,13 @@ const config: Config = {
         primary: {
           DEFAULT: themeColor("--primary"),
           fg: themeColor("--primary-fg"),
+          // Use `ink` whenever the colour is text on a neutral background.
+          ink: themeColor("--primary-ink"),
         },
         accent: {
           DEFAULT: themeColor("--accent"),
           fg: themeColor("--accent-fg"),
+          ink: themeColor("--accent-ink"),
         },
         ring: themeColor("--ring"),
         danger: {

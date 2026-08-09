@@ -49,7 +49,7 @@ export function Field({
         >
           {label}
           {required ? (
-            <span aria-hidden className="text-primary">
+            <span aria-hidden className="text-primary-ink">
               *
             </span>
           ) : null}

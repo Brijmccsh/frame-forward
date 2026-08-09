@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { UploadForm } from "@/components/photos/upload-form";
 import { EmptyState } from "@/components/ui/empty-state";
 import { requireRole } from "@/lib/auth";
@@ -13,7 +12,7 @@ export default async function UploadPage() {
   const categories = await listCategories();
 
   return (
-    <SignedInShell>
+    <>
       <Link
         href="/app"
         className="link-underline inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-text"
@@ -50,6 +49,6 @@ export default async function UploadPage() {
           />
         )}
       </div>
-    </SignedInShell>
+    </>
   );
 }

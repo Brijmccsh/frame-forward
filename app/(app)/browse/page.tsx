@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { BrowseGallery } from "@/components/photos/browse-gallery";
 import { CategoryFilter } from "@/components/photos/category-filter";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { requireProfile } from "@/lib/auth";
@@ -37,7 +36,7 @@ export default async function BrowsePage({
   const active = categories.find((category) => category.slug === activeSlug);
 
   return (
-    <SignedInShell>
+    <>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-head text-3xl font-bold text-text sm:text-4xl">
@@ -105,6 +104,6 @@ export default async function BrowsePage({
           />
         )}
       </div>
-    </SignedInShell>
+    </>
   );
 }

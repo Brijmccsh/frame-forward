@@ -24,7 +24,7 @@ export function HowItWorks() {
     >
       <div className="container-page">
         <div className="max-w-prose">
-          <p className="text-xs font-semibold uppercase tracking-widest text-accent">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent-ink">
             How it works
           </p>
           <h2

@@ -34,13 +34,13 @@ export default function HomePage() {
 
             <h1 className="text-balance font-head text-5xl font-bold leading-[1.05] tracking-tight text-text sm:text-6xl lg:text-7xl">
               Photography that{" "}
-              <span className="relative whitespace-nowrap text-primary">
+              <span className="relative whitespace-nowrap text-primary-ink">
                 gives back.
                 <svg
                   aria-hidden
                   viewBox="0 0 300 12"
                   preserveAspectRatio="none"
-                  className="absolute -bottom-1 left-0 h-2.5 w-full text-primary/45"
+                  className="absolute -bottom-1 left-0 h-2.5 w-full text-primary-ink/45"
                 >
                   <path
                     d="M2 8C60 3 130 2 298 5"

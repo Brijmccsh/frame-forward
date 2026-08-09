@@ -76,7 +76,7 @@ export function ConfirmUsageDialog({
 
       <fieldset disabled={pending}>
         <legend className="mb-2.5 text-sm font-medium text-text">
-          How did you use it? <span className="text-primary">*</span>
+          How did you use it? <span className="text-primary-ink">*</span>
         </legend>
         <div className="flex flex-wrap gap-2">
           {USE_TYPES.map((type) => (

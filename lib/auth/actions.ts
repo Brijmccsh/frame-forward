@@ -1,9 +1,11 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LOGIN_PATH, findProfile, homePathFor } from "@/lib/auth";
+import { ROLE_COOKIE, roleCookieOptions } from "@/lib/auth/role-cookie";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -77,6 +79,11 @@ export async function verifyLoginCode(
   const session = await findProfile(supabase, data.user.id);
   const home = homePathFor(session);
 
+  // Lets middleware route by role without a query on every request.
+  if (session) {
+    cookies().set(ROLE_COOKIE, session.role, roleCookieOptions);
+  }
+
   // Honour ?next= only for in-app paths, and never over onboarding.
   const safeNext =
     next && next.startsWith("/") && !next.startsWith("//") && session
@@ -90,6 +97,7 @@ export async function verifyLoginCode(
 export async function signOut(): Promise<never> {
   const supabase = createClient();
   await supabase.auth.signOut();
+  cookies().delete(ROLE_COOKIE);
   revalidatePath("/", "layout");
   redirect(LOGIN_PATH);
 }

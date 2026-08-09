@@ -9,6 +9,9 @@ import { publicUrlFor } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import type { PhotoWithRelations } from "@/lib/queries/photos";
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export interface PhotoLightboxProps {
   photos: PhotoWithRelations[];
   /** Index of the open photo, or null when closed. */
@@ -27,6 +30,7 @@ export function PhotoLightbox({
 }: PhotoLightboxProps) {
   const [mounted, setMounted] = React.useState(false);
   const closeRef = React.useRef<HTMLButtonElement>(null);
+  const panelRef = React.useRef<HTMLDivElement>(null);
   const open = index !== null;
   const photo = open ? photos[index] : undefined;
 
@@ -48,6 +52,22 @@ export function PhotoLightbox({
       if (event.key === "ArrowLeft" && index !== null) {
         onIndexChange((index - 1 + photos.length) % photos.length);
       }
+
+      // Keep Tab inside the viewer while it's open.
+      if (event.key !== "Tab") return;
+      const panel = panelRef.current;
+      if (!panel) return;
+      const items = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
@@ -68,6 +88,7 @@ export function PhotoLightbox({
       role="dialog"
       aria-modal="true"
       aria-label={photo.title ?? "Photo"}
+      ref={panelRef}
       className="fixed inset-0 z-50 flex animate-fade-in flex-col bg-brand-navy/80 backdrop-blur-md"
     >
       <div className="flex items-center justify-between gap-3 p-4">

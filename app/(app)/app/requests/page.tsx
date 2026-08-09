@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { SignedInShell } from "@/components/layout/signed-in-shell";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -34,7 +33,7 @@ export default async function PhotographerRequestsPage() {
   const confirmed = requests.filter((request) => request.status === "used");
 
   return (
-    <SignedInShell>
+    <>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-head text-3xl font-bold text-text sm:text-4xl">
@@ -131,7 +130,7 @@ export default async function PhotographerRequestsPage() {
                     {request.nonprofit?.email ? (
                       <a
                         href={`mailto:${request.nonprofit.email}`}
-                        className="link-underline text-accent"
+                        className="link-underline text-accent-ink"
                       >
                         {request.nonprofit.email}
                       </a>
@@ -254,6 +253,6 @@ export default async function PhotographerRequestsPage() {
           />
         )}
       </section>
-    </SignedInShell>
+    </>
   );
 }
