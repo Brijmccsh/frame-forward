@@ -12,6 +12,8 @@ export interface UserMenuProps {
   email: string | null;
   avatarUrl: string | null;
   role: Role;
+  /** Founder account with no photographer/nonprofit profile of its own. */
+  adminOnly?: boolean;
 }
 
 const links: Record<Role, Array<{ href: string; label: string }>> = {
@@ -28,7 +30,13 @@ const links: Record<Role, Array<{ href: string; label: string }>> = {
 };
 
 /** Avatar button with a dropdown of role-aware links and sign out. */
-export function UserMenu({ name, email, avatarUrl, role }: UserMenuProps) {
+export function UserMenu({
+  name,
+  email,
+  avatarUrl,
+  role,
+  adminOnly = false,
+}: UserMenuProps) {
   const [open, setOpen] = React.useState(false);
   const [pending, startTransition] = React.useTransition();
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -98,7 +106,7 @@ export function UserMenu({ name, email, avatarUrl, role }: UserMenuProps) {
             ) : null}
           </div>
           <div className="my-1 h-px bg-border" />
-          {links[role].map((link) => (
+          {(adminOnly ? [] : links[role]).map((link) => (
             <Link
               key={link.href}
               href={link.href}

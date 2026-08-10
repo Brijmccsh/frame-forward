@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { HOME_PATH, findProfile, getUser } from "@/lib/auth";
+import { PENDING_PATH, findProfile, getUser, homePathFor } from "@/lib/auth";
 import { ROLE_COOKIE, roleCookieOptions } from "@/lib/auth/role-cookie";
 import {
   cleanText,
@@ -77,7 +77,7 @@ export async function createPhotographerProfile(
 
   const supabase = createClient();
   const existing = await findProfile(supabase, user.id);
-  if (existing) redirect(HOME_PATH[existing.role]);
+  if (existing) redirect(homePathFor(existing));
 
   const { error } = await supabase
     .from("photographers")
@@ -87,7 +87,8 @@ export async function createPhotographerProfile(
 
   cookies().set(ROLE_COOKIE, "photographer", roleCookieOptions);
   revalidatePath("/", "layout");
-  redirect(HOME_PATH.photographer);
+  // The database forces new rows to 'pending', so this is the waiting room.
+  redirect(PENDING_PATH);
 }
 
 /** Creates the nonprofit profile for the signed-in user, then goes home. */
@@ -108,7 +109,7 @@ export async function createNonprofitProfile(
 
   const supabase = createClient();
   const existing = await findProfile(supabase, user.id);
-  if (existing) redirect(HOME_PATH[existing.role]);
+  if (existing) redirect(homePathFor(existing));
 
   const { error } = await supabase
     .from("nonprofits")
@@ -118,7 +119,7 @@ export async function createNonprofitProfile(
 
   cookies().set(ROLE_COOKIE, "nonprofit", roleCookieOptions);
   revalidatePath("/", "layout");
-  redirect(HOME_PATH.nonprofit);
+  redirect(PENDING_PATH);
 }
 
 export async function updatePhotographerProfile(

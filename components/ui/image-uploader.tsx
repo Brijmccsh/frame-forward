@@ -39,7 +39,7 @@ export interface ImageUploaderProps {
 const shapes = {
   avatar: "h-28 w-28",
   square: "aspect-square w-full max-w-[16rem]",
-  cover: "aspect-[3/1] w-full",
+  cover: "aspect-[5/2] w-full",
   photo: "aspect-[4/3] w-full",
 };
 

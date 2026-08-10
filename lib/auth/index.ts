@@ -4,6 +4,7 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { ADMIN_PATH, isAdminEmail } from "./admin";
 import type { Nonprofit, Photographer, Role, SessionProfile } from "@/lib/types";
 
 /** Where each role lands after signing in. */
@@ -14,6 +15,8 @@ export const HOME_PATH: Record<Role, string> = {
 
 export const ONBOARDING_PATH = "/onboarding";
 export const LOGIN_PATH = "/login";
+/** Where applicants wait while their profile is pending (or after a denial). */
+export const PENDING_PATH = "/pending";
 
 /**
  * The signed-in user, or null. Cached per request so multiple callers in one
@@ -58,9 +61,20 @@ export async function findProfile(
   return null;
 }
 
-/** Path a user with this profile state should land on. */
-export function homePathFor(session: SessionProfile | null): string {
-  return session ? HOME_PATH[session.role] : ONBOARDING_PATH;
+/**
+ * Path a user with this profile state should land on.
+ *
+ * Order matters: no profile -> onboarding, unapproved -> the waiting room,
+ * otherwise their role's home.
+ */
+export function homePathFor(
+  session: SessionProfile | null,
+  options: { isAdmin?: boolean } = {},
+): string {
+  // An admin without a profile of their own goes straight to the queue.
+  if (!session) return options.isAdmin ? ADMIN_PATH : ONBOARDING_PATH;
+  if (session.profile.status !== "approved") return PENDING_PATH;
+  return HOME_PATH[session.role];
 }
 
 /**
@@ -79,8 +93,16 @@ export const getSessionProfile = cache(
 export async function resolveHomePath(): Promise<string> {
   const user = await getUser();
   if (!user) return LOGIN_PATH;
-  return homePathFor(await getSessionProfile());
+  return homePathFor(await getSessionProfile(), {
+    isAdmin: isAdminEmail(user.email),
+  });
 }
+
+/** True when the signed-in user may review applications. */
+export const isAdmin = cache(async (): Promise<boolean> => {
+  const user = await getUser();
+  return isAdminEmail(user?.email);
+});
 
 /** Use in server components that require a signed-in user. */
 export async function requireUser(): Promise<User> {
@@ -89,12 +111,27 @@ export async function requireUser(): Promise<User> {
   return user;
 }
 
-/** Use in server components that require a completed profile. */
+/**
+ * Use in server components that require a completed, approved profile.
+ *
+ * This lives in the (app) route-group layout, which runs before any streaming
+ * begins — so the redirect is a real 307 rather than a client-side bounce.
+ */
 export async function requireProfile(): Promise<SessionProfile> {
-  await requireUser();
+  const user = await requireUser();
   const session = await getSessionProfile();
-  if (!session) redirect(ONBOARDING_PATH);
+  if (!session) {
+    redirect(isAdminEmail(user.email) ? ADMIN_PATH : ONBOARDING_PATH);
+  }
+  if (session.profile.status !== "approved") redirect(PENDING_PATH);
   return session;
+}
+
+/** Admin-only pages. Sends everyone else to wherever they belong. */
+export async function requireAdmin(): Promise<User> {
+  const user = await requireUser();
+  if (!isAdminEmail(user.email)) redirect(await resolveHomePath());
+  return user;
 }
 
 /** Require a specific role; sends the wrong role to their own home. */

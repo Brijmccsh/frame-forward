@@ -7,7 +7,7 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 import { RoleCards } from "@/components/onboarding/role-cards";
 import { PhotographerForm } from "@/components/profile/photographer-form";
 import { NonprofitForm } from "@/components/profile/nonprofit-form";
-import { HOME_PATH, getSessionProfile, requireUser } from "@/lib/auth";
+import { getSessionProfile, homePathFor, requireUser } from "@/lib/auth";
 import type { Role } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Welcome" };
@@ -24,7 +24,7 @@ export default async function OnboardingPage({
 
   // Already onboarded — nothing to do here.
   const session = await getSessionProfile();
-  if (session) redirect(HOME_PATH[session.role]);
+  if (session) redirect(homePathFor(session));
 
   const role = isRole(searchParams.role) ? searchParams.role : null;
 

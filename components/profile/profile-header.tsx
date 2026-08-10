@@ -35,7 +35,10 @@ export function ProfileHeader({
     <header>
       <div
         className={cn(
-          "relative aspect-[3/1] w-full overflow-hidden rounded-lg border border-border sm:aspect-[4/1]",
+          // Was 3:1 / 4:1, which cropped a normal 3:2 photo down to a thin
+          // band and cut off whatever was near the top. These ratios keep the
+          // banner shape while showing much more of the image.
+          "relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-border sm:aspect-[5/2] lg:aspect-[3/1]",
           !coverUrl &&
             (nonprofit
               ? "bg-gradient-to-br from-brand-lteal via-brand-teal/60 to-brand-lpink/60"
@@ -49,7 +52,7 @@ export function ProfileHeader({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 1024px"
-            className="object-cover"
+            className="object-cover object-[center_38%]"
           />
         ) : null}
       </div>

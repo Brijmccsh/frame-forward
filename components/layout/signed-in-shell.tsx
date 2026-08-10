@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { AppShell } from "./app-shell";
 import { NavLink } from "./nav-link";
 import { UserMenu } from "./user-menu";
-import { requireProfile } from "@/lib/auth";
+import { isAdmin, requireProfile } from "@/lib/auth";
 import type { Role } from "@/lib/types";
 
 const NAV: Record<Role, Array<{ href: string; label: string }>> = {
@@ -29,6 +29,7 @@ export async function SignedInShell({
   contained?: boolean;
 }) {
   const session = await requireProfile();
+  const admin = await isAdmin();
 
   const name =
     session.role === "photographer"
@@ -38,7 +39,11 @@ export async function SignedInShell({
   return (
     <AppShell
       contained={contained}
-      nav={NAV[session.role].map((item) => (
+      nav={[
+        ...NAV[session.role],
+        // The founder gets the review queue alongside their normal nav.
+        ...(admin ? [{ href: "/admin/applications", label: "Applications" }] : []),
+      ].map((item) => (
         <NavLink
           key={item.href}
           href={item.href}

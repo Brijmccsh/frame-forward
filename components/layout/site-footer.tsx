@@ -46,10 +46,10 @@ export function SiteFooter() {
             <Mail aria-hidden className="h-4 w-4 text-accent-ink" />
             Contact us at{" "}
             <a
-              href="mailto:founder@frameforward.org"
+              href="mailto:founders@frameforward.org"
               className="link-underline font-medium text-accent-ink"
             >
-              founder@frameforward.org
+              founders@frameforward.org
             </a>
           </p>
 

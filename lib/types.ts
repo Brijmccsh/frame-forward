@@ -6,6 +6,9 @@
 
 export type Role = "photographer" | "nonprofit";
 
+/** Application state. New sign-ups start as "pending". */
+export type ProfileStatus = "pending" | "approved" | "denied";
+
 export interface Photographer {
   id: string;
   name: string | null;
@@ -19,6 +22,7 @@ export interface Photographer {
   location: string | null;
   website: string | null;
   instagram: string | null;
+  status: ProfileStatus;
   created_at: string;
 }
 
@@ -34,6 +38,7 @@ export interface Nonprofit {
   location: string | null;
   ein: string | null;
   verified: boolean;
+  status: ProfileStatus;
   created_at: string;
 }
 

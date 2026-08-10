@@ -3,13 +3,14 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { publicUrlFor } from "@/lib/storage";
 import { getCategoryBySlug } from "./categories";
-import type { Category, Photo } from "@/lib/types";
+import type { Category, Photo, ProfileStatus } from "@/lib/types";
 
 /** Minimal photographer info shown on a photo card. */
 export interface PhotoAuthor {
   id: string;
   name: string | null;
   avatar_url: string | null;
+  status?: ProfileStatus;
 }
 
 export interface PhotoWithRelations extends Photo {
@@ -19,9 +20,19 @@ export interface PhotoWithRelations extends Photo {
 
 const SELECT_WITH_RELATIONS = `
   *,
-  photographer:photographers(id, name, avatar_url),
+  photographer:photographers(id, name, avatar_url, status),
   category:categories(id, name, slug, emoji)
 ` as const;
+
+/**
+ * Gallery variant: `!inner` makes the photographer join filter the outer rows,
+ * so photos by pending or denied accounts drop out entirely rather than
+ * rendering with a missing author.
+ */
+const SELECT_FOR_GALLERY = SELECT_WITH_RELATIONS.replace(
+  "photographer:photographers(",
+  "photographer:photographers!inner(",
+);
 
 /** Public URL for a stored photo object. */
 export function photoUrl(photo: Pick<Photo, "image_path">) {
@@ -71,8 +82,9 @@ export async function listPublished({
   const supabase = createClient();
   let query = supabase
     .from("photos")
-    .select(SELECT_WITH_RELATIONS)
+    .select(SELECT_FOR_GALLERY)
     .eq("is_published", true)
+    .eq("photographer.status", "approved")
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
