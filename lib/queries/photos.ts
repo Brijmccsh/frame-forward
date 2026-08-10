@@ -59,41 +59,100 @@ function normalise(row: unknown): PhotoWithRelations {
   };
 }
 
+export const GALLERY_PAGE_SIZE = 24;
+
 export interface ListPublishedOptions {
   /** Category slug to filter by. Omit or pass null for everything. */
   categorySlug?: string | null;
+  /** Free-text search across title and caption. */
+  query?: string | null;
   photographerId?: string;
-  limit?: number;
-  offset?: number;
+  /** 1-based. */
+  page?: number;
+  pageSize?: number;
 }
 
-/** Every published photo, newest first, optionally filtered by category. */
+export interface PublishedPage {
+  photos: PhotoWithRelations[];
+  /** Total matching photos, not just this page. */
+  total: number;
+  page: number;
+  pageSize: number;
+  pageCount: number;
+}
+
+/**
+ * Normalise a search term for PostgREST's `or` filter.
+ *
+ * Commas and parentheses are the filter's own syntax, so an unescaped one
+ * would corrupt the query rather than just fail to match. `%` and `_` are LIKE
+ * wildcards — stripping them keeps the match predictable.
+ */
+export function sanitizeSearch(input: string | null | undefined): string | null {
+  if (!input) return null;
+  const cleaned = input
+    .replace(/[,()%_\\*]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+  return cleaned.length ? cleaned : null;
+}
+
+/**
+ * One page of published photos, newest first, optionally filtered by category
+ * and search term. Returns the total count so the UI can paginate properly
+ * instead of silently truncating.
+ */
 export async function listPublished({
   categorySlug,
+  query: search,
   photographerId,
-  limit = 60,
-  offset = 0,
-}: ListPublishedOptions = {}): Promise<PhotoWithRelations[]> {
+  page = 1,
+  pageSize = GALLERY_PAGE_SIZE,
+}: ListPublishedOptions = {}): Promise<PublishedPage> {
+  const term = sanitizeSearch(search);
+  const empty: PublishedPage = {
+    photos: [],
+    total: 0,
+    page: 1,
+    pageSize,
+    pageCount: 0,
+  };
+
   // Filter on the photos table itself — filtering an embedded relation would
   // only narrow the join, leaving the outer rows (and the page size) wrong.
   const category = categorySlug ? await getCategoryBySlug(categorySlug) : null;
-  if (categorySlug && !category) return [];
+  if (categorySlug && !category) return empty;
+
+  const safePage = Math.max(1, Math.floor(page));
+  const from = (safePage - 1) * pageSize;
 
   const supabase = createClient();
-  let query = supabase
+  let builder = supabase
     .from("photos")
-    .select(SELECT_FOR_GALLERY)
+    .select(SELECT_FOR_GALLERY, { count: "exact" })
     .eq("is_published", true)
     .eq("photographer.status", "approved")
     .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+    .range(from, from + pageSize - 1);
 
-  if (category) query = query.eq("category_id", category.id);
-  if (photographerId) query = query.eq("photographer_id", photographerId);
+  if (category) builder = builder.eq("category_id", category.id);
+  if (photographerId) builder = builder.eq("photographer_id", photographerId);
+  if (term) {
+    builder = builder.or(`title.ilike.%${term}%,caption.ilike.%${term}%`);
+  }
 
-  const { data, error } = await query;
+  const { data, error, count } = await builder;
   if (error) throw new Error(`Could not load photos: ${error.message}`);
-  return (data ?? []).map(normalise);
+
+  const total = count ?? 0;
+  return {
+    photos: (data ?? []).map(normalise),
+    total,
+    page: safePage,
+    pageSize,
+    pageCount: Math.max(1, Math.ceil(total / pageSize)),
+  };
 }
 
 /** One photographer's photos. Drafts are included only for the owner. */

@@ -2,10 +2,11 @@ import { Camera } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProfileHeader } from "@/components/profile/profile-header";
-import { PhotoGrid } from "@/components/photos/photo-grid";
+import { PortfolioSections } from "@/components/photos/portfolio-sections";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import { getProfileById, getPublishedPhotos } from "@/lib/profiles/queries";
+import { getProfileById } from "@/lib/profiles/queries";
+import { listByPhotographer } from "@/lib/queries/photos";
 
 export async function generateMetadata({
   params,
@@ -66,7 +67,7 @@ export default async function PublicProfilePage({
 
   const photos =
     session.role === "photographer"
-      ? await getPublishedPhotos(session.profile.id)
+      ? await listByPhotographer(session.profile.id)
       : [];
 
   const isPhotographer = session.role === "photographer";
@@ -111,7 +112,9 @@ export default async function PublicProfilePage({
                   ) : null}
                 </h2>
                 {photos.length ? (
-                  <PhotoGrid photos={photos} className="mt-4" />
+                  <div className="mt-5">
+                    <PortfolioSections photos={photos} />
+                  </div>
                 ) : (
                   <EmptyState
                     className="mt-4"
