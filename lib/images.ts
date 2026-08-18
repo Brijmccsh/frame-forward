@@ -38,7 +38,7 @@ export const IMPACT_IMAGE: SeedImage = {
 
 /** Category slug -> representative photo. Keys match `categories.slug`. */
 export const CATEGORY_IMAGES: Record<string, string> = {
-  "nature-wildlife": "/seed/cat-nature-wildlife.webp",
+  "nature-landscapes": "/seed/cat-nature-wildlife.webp",
   "people-portraits": "/seed/cat-people-portraits.webp",
   "community-events": "/seed/cat-community-events.webp",
   "urban-architecture": "/seed/cat-urban-architecture.webp",
@@ -55,7 +55,7 @@ export const categoryImage = (slug: string): string | null =>
 
 /** Fallback list used when the database can't be reached at render time. */
 export const FALLBACK_CATEGORIES = [
-  { slug: "nature-wildlife", name: "Nature & Wildlife" },
+  { slug: "nature-landscapes", name: "Nature & Landscapes" },
   { slug: "people-portraits", name: "People & Portraits" },
   { slug: "community-events", name: "Community & Events" },
   { slug: "urban-architecture", name: "Urban & Architecture" },

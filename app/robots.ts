@@ -5,9 +5,20 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
-      // Everything behind auth — no value in crawling, and it all redirects.
-      disallow: ["/app", "/browse", "/profile", "/requests", "/onboarding", "/u", "/home", "/login"],
+      allow: ["/", "/photos", "/photo", "/photographers"],
+      // Behind auth: no value in crawling, and it all redirects to /login.
+      disallow: [
+        "/app",
+        "/browse",
+        "/profile",
+        "/requests",
+        "/onboarding",
+        "/pending",
+        "/admin",
+        "/u",
+        "/home",
+        "/login",
+      ],
     },
     sitemap: `${siteUrl()}/sitemap.xml`,
   };

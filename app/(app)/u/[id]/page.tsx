@@ -6,6 +6,7 @@ import { PortfolioSections } from "@/components/photos/portfolio-sections";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getProfileById } from "@/lib/profiles/queries";
+import { toSlug } from "@/lib/seo/slug";
 import { listByPhotographer } from "@/lib/queries/photos";
 
 export async function generateMetadata({
@@ -20,7 +21,17 @@ export async function generateMetadata({
     session.role === "photographer"
       ? session.profile.name
       : session.profile.org_name;
-  return { title: name ?? "Profile" };
+
+  // This page is the signed-in view; the crawlable twin lives at
+  // /photographers/[slug]. Canonical + noindex keep them from competing.
+  return {
+    title: name ?? "Profile",
+    robots: { index: false, follow: true },
+    alternates:
+      session.role === "photographer"
+        ? { canonical: `/photographers/${toSlug(name, session.profile.id)}` }
+        : undefined,
+  };
 }
 
 /** Detail row shown in the sidebar. */
