@@ -7,10 +7,15 @@ import { ValueTwoUp } from "@/components/marketing/value-two-up";
 import { StatsBand } from "@/components/marketing/stats-band";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/lib/seo/jsonld";
 
 export default function HomePage() {
   return (
     <div className="flex min-h-dvh flex-col">
+      {/* Tells Google this is Frame Forward the organisation, not a phrase. */}
+      <JsonLd data={organizationJsonLd()} />
+      <JsonLd data={webSiteJsonLd()} />
+
       {/* Without JS the reveal animations never fire, so pin them visible. */}
       <noscript>
         <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
