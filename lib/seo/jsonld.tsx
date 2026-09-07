@@ -136,6 +136,31 @@ export function collectionJsonLd({
   };
 }
 
+/**
+ * The photographer index as an ItemList.
+ *
+ * The other three listing pages describe themselves with CollectionPage, which
+ * models a page *of images*. This one lists people, so an ItemList of the same
+ * Person entities their profile pages declare keeps the graph consistent.
+ */
+export function photographerListJsonLd(photographers: PublicPhotographer[]) {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    url: `${base}/photographers`,
+    name: "Student photographers",
+    numberOfItems: photographers.length,
+    isPartOf: { "@id": `${base}/#website` },
+    itemListElement: photographers.map((photographer, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${base}/photographers/${photographer.slug}`,
+      name: photographer.name ?? "Student photographer",
+    })),
+  };
+}
+
 /** Renders a JSON-LD script tag. */
 export function JsonLd({ data }: { data: unknown }) {
   return (

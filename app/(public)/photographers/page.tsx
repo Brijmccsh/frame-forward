@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { JsonLd, photographerListJsonLd } from "@/lib/seo/jsonld";
 import { listPublicPhotographers } from "@/lib/queries/public";
 
 const TITLE = "Student photographers";
@@ -34,37 +35,40 @@ export default async function PhotographersPage() {
       </header>
 
       {photographers.length ? (
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {photographers.map((photographer) => (
-            <li key={photographer.id}>
-              <Link
-                href={`/photographers/${photographer.slug}`}
-                className="flex h-full items-start gap-4 rounded-lg border border-border bg-surface p-5 shadow-sm transition-all duration-300 ease-soft hover:-translate-y-1 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Avatar
-                  src={photographer.avatar_url}
-                  name={photographer.name}
-                  size="lg"
-                />
-                <span className="min-w-0">
-                  <span className="block truncate font-head text-lg font-semibold text-text">
-                    {photographer.name ?? "Student photographer"}
+        <>
+          <JsonLd data={photographerListJsonLd(photographers)} />
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {photographers.map((photographer) => (
+              <li key={photographer.id}>
+                <Link
+                  href={`/photographers/${photographer.slug}`}
+                  className="flex h-full items-start gap-4 rounded-lg border border-border bg-surface p-5 shadow-sm transition-all duration-300 ease-soft hover:-translate-y-1 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <Avatar
+                    src={photographer.avatar_url}
+                    name={photographer.name}
+                    size="lg"
+                  />
+                  <span className="min-w-0">
+                    <span className="block truncate font-head text-lg font-semibold text-text">
+                      {photographer.name ?? "Student photographer"}
+                    </span>
+                    {photographer.tagline ? (
+                      <span className="mt-1 line-clamp-2 block text-sm leading-relaxed text-muted">
+                        {photographer.tagline}
+                      </span>
+                    ) : null}
+                    {photographer.location ? (
+                      <span className="mt-2 block text-xs text-muted">
+                        {photographer.location}
+                      </span>
+                    ) : null}
                   </span>
-                  {photographer.tagline ? (
-                    <span className="mt-1 line-clamp-2 block text-sm leading-relaxed text-muted">
-                      {photographer.tagline}
-                    </span>
-                  ) : null}
-                  {photographer.location ? (
-                    <span className="mt-2 block text-xs text-muted">
-                      {photographer.location}
-                    </span>
-                  ) : null}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
       ) : (
         <div className="mt-10">
           <EmptyState

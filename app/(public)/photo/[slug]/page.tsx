@@ -55,13 +55,28 @@ export default async function PublicPhotoPage({
   const photo = await getPublicPhotoBySlug(params.slug);
   if (!photo) notFound();
 
-  const more = photo.photographer
-    ? await listPublicPhotos({
-        photographerId: photo.photographer.id,
-        pageSize: 8,
-      })
-    : null;
-  const others = (more?.photos ?? []).filter((item) => item.id !== photo.id);
+  // Two strips, fetched together. Each photo page is otherwise a leaf node
+  // reachable only from its category page and the sitemap, which is exactly the
+  // shape a crawler deprioritises.
+  const [byPhotographer, inCategory] = await Promise.all([
+    photo.photographer
+      ? listPublicPhotos({ photographerId: photo.photographer.id, pageSize: 8 })
+      : null,
+    photo.category
+      ? listPublicPhotos({ categoryId: photo.category.id, pageSize: 8 })
+      : null,
+  ]);
+
+  const others = (byPhotographer?.photos ?? [])
+    .filter((item) => item.id !== photo.id)
+    .slice(0, 4);
+
+  // A photo by the same photographer in the same category qualifies for both
+  // strips; without this it would render twice on one page.
+  const shown = new Set([photo.id, ...others.map((item) => item.id)]);
+  const related = (inCategory?.photos ?? [])
+    .filter((item) => !shown.has(item.id))
+    .slice(0, 4);
 
   return (
     <>
@@ -178,8 +193,27 @@ export default async function PublicPhotoPage({
             More from {photo.photographer?.name ?? "this photographer"}
           </h2>
           <div className="mt-5">
-            <PublicPhotoGrid photos={others.slice(0, 4)} />
+            <PublicPhotoGrid photos={others} />
           </div>
+        </section>
+      ) : null}
+
+      {related.length && photo.category ? (
+        <section className="mt-16">
+          <h2 className="font-head text-xl font-semibold text-text">
+            More {photo.category.name.toLowerCase()} photography
+          </h2>
+          <div className="mt-5">
+            <PublicPhotoGrid photos={related} />
+          </div>
+          <p className="mt-6 text-sm text-muted">
+            <Link
+              href={`/photos/${photo.category.slug}`}
+              className="link-underline font-medium text-accent-ink"
+            >
+              See all {photo.category.name.toLowerCase()} photos
+            </Link>
+          </p>
         </section>
       ) : null}
     </>

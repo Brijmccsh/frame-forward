@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { Hero } from "@/components/marketing/hero";
 import { Steps } from "@/components/marketing/steps";
@@ -8,6 +9,15 @@ import { StatsBand } from "@/components/marketing/stats-band";
 import { ClosingCta } from "@/components/marketing/closing-cta";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/lib/seo/jsonld";
+
+/**
+ * Only a canonical: title, description and the social cards all come from the
+ * root layout. The landing page is the URL most likely to collect ?utm_* and
+ * ?fbclid variants, so it is the one that most needs to point at itself.
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (
