@@ -1,31 +1,26 @@
 /** @type {import('next').NextConfig} */
-const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
-  : undefined;
-
 const nextConfig = {
   images: {
-    remotePatterns: supabaseHost
-      ? [
-          {
-            protocol: "https",
-            hostname: supabaseHost,
-            pathname: "/storage/v1/object/public/**",
-          },
-        ]
-      : [],
+    /**
+     * Every next/image URL is built by lib/supabase/image-loader.ts, so the
+     * browser fetches photos straight from Supabase's CDN and this server never
+     * touches the bytes. The built-in optimizer was the main memory risk on
+     * this small instance, and crawlers alone were enough to trip it.
+     *
+     * A custom loader switches the optimizer off entirely — /_next/image
+     * returns 404 — so remotePatterns, formats and minimumCacheTTL are gone
+     * too: only the optimizer read them.
+     */
+    loader: "custom",
+    loaderFile: "./lib/supabase/image-loader.ts",
     /**
      * Nothing on the site renders wider than ~1200 CSS px, so the default
-     * 1920/2048/3840 breakpoints only ever cost work. Trimming them means
-     * fewer variants to generate — this app runs on a small instance where
-     * a burst of image optimizations is the main memory risk.
+     * 1920/2048/3840 breakpoints only ever cost work. These still decide which
+     * widths the loader is asked for, which matters once Supabase transforms
+     * are switched on.
      */
     deviceSizes: [640, 750, 828, 1080, 1200, 1600],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    formats: ["image/webp"],
-    // Optimized output is regenerated on every cold start (ephemeral disk),
-    // so keep it in the browser cache for a good while.
-    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async rewrites() {
     return [

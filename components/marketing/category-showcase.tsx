@@ -30,7 +30,7 @@ export function CategoryShowcase() {
           {FALLBACK_CATEGORIES.map((category, index) => (
             <Reveal as="li" key={category.slug} delay={(index % 5) * 70}>
               <Link
-                href={`/browse?category=${category.slug}`}
+                href={`/photos/${category.slug}`}
                 className="group relative block aspect-[4/5] overflow-hidden rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-soft hover:-translate-y-1.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg dark:ring-white/10"
               >
                 <Image

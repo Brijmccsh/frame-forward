@@ -38,7 +38,7 @@ export function ClosingCta() {
                   <ArrowRight aria-hidden className="h-4 w-4" />
                 </ButtonLink>
                 <ButtonLink
-                  href="/browse"
+                  href="/photos"
                   size="lg"
                   className="border border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:shadow-none"
                 >

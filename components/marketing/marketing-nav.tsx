@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/button";
 const LINKS = [
   { href: "#for-photographers", label: "For Photographers" },
   { href: "#for-nonprofits", label: "For Nonprofits" },
-  { href: "/browse", label: "Browse" },
+  { href: "/photos", label: "Browse" },
   { href: "#how-it-works", label: "How it works" },
 ];
 

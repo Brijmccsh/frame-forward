@@ -31,6 +31,91 @@ export function validateImageFile(file: File): string | null {
   return null;
 }
 
+/** Longest edge, in px, that we store — well above anything the site renders. */
+const MAX_STORED_EDGE = 2000;
+/** Files at or under this size, within the edge limit, upload untouched. */
+const DOWNSCALE_ABOVE_BYTES = 1024 * 1024;
+
+/**
+ * Shrinks an image in the browser before it's uploaded.
+ *
+ * Images are served straight from Supabase's CDN at their stored size — there
+ * is no optimizer resizing them on the way out (lib/supabase/image-loader.ts) —
+ * so a multi-megabyte original is a multi-megabyte download for every visitor,
+ * on every grid it appears in.
+ *
+ * GIFs pass through (a canvas keeps only the first frame), as does anything
+ * already within MAX_STORED_EDGE and under ~1 MB. The rest is redrawn with its
+ * longest edge at MAX_STORED_EDGE and re-encoded as WebP. A canvas that can't
+ * encode WebP silently hands back PNG instead — usually bigger than what we
+ * started with — so the output type is checked. JPEG sources then fall back to
+ * JPEG; anything else is left alone, since it may carry transparency that JPEG
+ * would turn black.
+ *
+ * Browsers apply EXIF orientation when drawing an <img>, so rotated phone
+ * photos stay upright even though re-encoding drops the metadata (GPS
+ * included).
+ *
+ * Never throws. If the file won't decode, or the result isn't smaller, the
+ * original is returned and the upload goes ahead exactly as before.
+ */
+export async function downscaleForUpload(file: File): Promise<File> {
+  if (file.type === "image/gif") return file;
+
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.src = objectUrl;
+    await image.decode();
+
+    const { naturalWidth: width, naturalHeight: height } = image;
+    const longest = Math.max(width, height);
+    if (longest <= MAX_STORED_EDGE && file.size <= DOWNSCALE_ABOVE_BYTES) {
+      return file;
+    }
+
+    const scale = Math.min(1, MAX_STORED_EDGE / longest);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(width * scale);
+    canvas.height = Math.round(height * scale);
+    const context = canvas.getContext("2d");
+    if (!context) return file;
+    context.imageSmoothingQuality = "high";
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    let blob = await canvasToBlob(canvas, "image/webp", 0.82);
+    if (blob?.type !== "image/webp") {
+      blob =
+        file.type === "image/jpeg"
+          ? await canvasToBlob(canvas, "image/jpeg", 0.85)
+          : null;
+    }
+    if (!blob || blob.size >= file.size) return file;
+
+    // The storage path is built from the name, so the extension must follow
+    // the new format or a .jpg path would hold WebP bytes.
+    const extension = blob.type === "image/webp" ? "webp" : "jpg";
+    const base = file.name.replace(/\.[^.]*$/, "") || "image";
+    return new File([blob], `${base}.${extension}`, {
+      type: blob.type,
+      lastModified: file.lastModified,
+    });
+  } catch {
+    // Undecodable here (say, an AVIF this browser can't read) — send it as-is.
+    return file;
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+function canvasToBlob(
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality: number,
+): Promise<Blob | null> {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
 /** `${userId}/${uuid}-${safe-name}` — keeps every user in their own folder. */
 export function buildObjectPath(userId: string, file: File) {
   const safeName = file.name

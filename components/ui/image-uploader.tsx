@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/browser";
 import {
   ACCEPT_ATTRIBUTE,
+  downscaleForUpload,
   uploadImage,
   validateImageFile,
   type StorageBucket,
@@ -86,9 +87,12 @@ export function ImageUploader({
       } = await supabase.auth.getSession();
       if (!session) throw new Error("Your session expired — sign in again.");
 
+      // Validation above ran on the file as picked, so 8 MB stays a hard
+      // ceiling; what's stored is the downscaled copy.
+      const upload = await downscaleForUpload(file);
       const result = await uploadImage({
         bucket,
-        file,
+        file: upload,
         userId,
         accessToken: session.access_token,
         onProgress: setProgress,

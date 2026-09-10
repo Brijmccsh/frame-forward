@@ -132,7 +132,7 @@ export function Hero() {
               Share your photography
               <ArrowRight aria-hidden className="h-4 w-4" />
             </ButtonLink>
-            <ButtonLink href="/browse" size="lg" variant="outline">
+            <ButtonLink href="/photos" size="lg" variant="outline">
               <Search aria-hidden className="h-4 w-4" />
               Browse the gallery
             </ButtonLink>

@@ -4,7 +4,7 @@ import { Logo } from "@/components/brand/logo";
 import { BRAND } from "@/lib/brand";
 
 const LINKS = [
-  { href: "/browse", label: "Browse" },
+  { href: "/photos", label: "Browse" },
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#for-photographers", label: "For photographers" },
   { href: "/#for-nonprofits", label: "For nonprofits" },
