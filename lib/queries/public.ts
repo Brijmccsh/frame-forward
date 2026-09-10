@@ -9,8 +9,9 @@ import { toSlug } from "@/lib/seo/slug";
  * Read-only queries for the crawlable pages.
  *
  * These hit the `public_*` views, which expose only approved photographers and
- * published photos — and never an email address. The signed-in app keeps using
- * its own queries under RLS; nothing here touches that path.
+ * nonprofits, and published photos — never an email address, EIN or other
+ * private contact detail. The signed-in app keeps using its own queries under
+ * RLS; nothing here touches that path.
  */
 
 export interface PublicPhotographer {
@@ -24,6 +25,19 @@ export interface PublicPhotographer {
   location: string | null;
   website: string | null;
   instagram: string | null;
+  created_at: string;
+}
+
+export interface PublicNonprofit {
+  id: string;
+  slug: string;
+  org_name: string | null;
+  avatar_url: string | null;
+  cover_url: string | null;
+  mission: string | null;
+  website: string | null;
+  location: string | null;
+  verified: boolean;
   created_at: string;
 }
 
@@ -62,6 +76,30 @@ function toPublicPhotographer(row: Record<string, unknown>): PublicPhotographer 
     location: (row.location as string) ?? null,
     website: (row.website as string) ?? null,
     instagram: (row.instagram as string) ?? null,
+    created_at: String(row.created_at),
+  };
+}
+
+/**
+ * Everything public_nonprofits exposes. Email, EIN and contact name stay on the
+ * base table; naming columns rather than `*` also means a column added to the
+ * view later isn't published by accident.
+ */
+const NONPROFIT_COLUMNS =
+  "id, org_name, avatar_url, cover_url, mission, website, location, verified, created_at";
+
+function toPublicNonprofit(row: Record<string, unknown>): PublicNonprofit {
+  const id = String(row.id);
+  return {
+    id,
+    slug: toSlug(row.org_name as string | null, id),
+    org_name: (row.org_name as string) ?? null,
+    avatar_url: (row.avatar_url as string) ?? null,
+    cover_url: (row.cover_url as string) ?? null,
+    mission: (row.mission as string) ?? null,
+    website: (row.website as string) ?? null,
+    location: (row.location as string) ?? null,
+    verified: row.verified === true,
     created_at: String(row.created_at),
   };
 }
@@ -195,6 +233,30 @@ export async function getPublicPhotographerBySlug(
   );
 }
 
+export const listPublicNonprofits = cache(
+  async (): Promise<PublicNonprofit[]> => {
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("public_nonprofits")
+      .select(NONPROFIT_COLUMNS);
+    return (data ?? [])
+      .map((row) => toPublicNonprofit(row as Record<string, unknown>))
+      .sort((a, b) => (a.org_name ?? "").localeCompare(b.org_name ?? ""));
+  },
+);
+
+/** Resolves `harbor-food-bank-1f0e2c3a` back to a nonprofit. */
+export async function getPublicNonprofitBySlug(
+  slug: string,
+): Promise<PublicNonprofit | null> {
+  const all = await listPublicNonprofits();
+  return (
+    all.find((nonprofit) => nonprofit.slug === slug) ??
+    all.find((nonprofit) => nonprofit.id.startsWith(slug)) ??
+    null
+  );
+}
+
 export async function getPublicPhotoBySlug(
   slug: string,
 ): Promise<PublicPhoto | null> {
@@ -220,11 +282,13 @@ export async function getPublicPhotoBySlug(
 /** Everything the sitemap needs, in one pass. */
 export async function listAllPublicForSitemap() {
   const supabase = createClient();
-  const [{ data: photos }, photographers, categories] = await Promise.all([
-    supabase.from("public_photos").select("id, title, created_at"),
-    listPublicPhotographers(),
-    listPublicCategories(),
-  ]);
+  const [{ data: photos }, photographers, nonprofits, categories] =
+    await Promise.all([
+      supabase.from("public_photos").select("id, title, created_at"),
+      listPublicPhotographers(),
+      listPublicNonprofits(),
+      listPublicCategories(),
+    ]);
 
   return {
     photos: (photos ?? []).map((row) => {
@@ -236,6 +300,7 @@ export async function listAllPublicForSitemap() {
       };
     }),
     photographers,
+    nonprofits,
     categories,
   };
 }

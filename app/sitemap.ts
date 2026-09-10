@@ -23,10 +23,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    {
+      url: `${base}/nonprofits`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
   ];
 
   try {
-    const { photos, photographers, categories } =
+    const { photos, photographers, nonprofits, categories } =
       await listAllPublicForSitemap();
 
     categories.forEach((category) => {
@@ -41,6 +47,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     photographers.forEach((photographer) => {
       entries.push({
         url: `${base}/photographers/${photographer.slug}`,
+        lastModified: now,
+        changeFrequency: "weekly",
+        priority: 0.7,
+      });
+    });
+
+    nonprofits.forEach((nonprofit) => {
+      entries.push({
+        url: `${base}/nonprofits/${nonprofit.slug}`,
         lastModified: now,
         changeFrequency: "weekly",
         priority: 0.7,

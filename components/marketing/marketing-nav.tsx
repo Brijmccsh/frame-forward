@@ -7,6 +7,7 @@ const LINKS = [
   { href: "#for-photographers", label: "For Photographers" },
   { href: "#for-nonprofits", label: "For Nonprofits" },
   { href: "/photos", label: "Browse" },
+  { href: "/nonprofits", label: "Nonprofits" },
   { href: "#how-it-works", label: "How it works" },
 ];
 

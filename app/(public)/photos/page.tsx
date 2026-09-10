@@ -58,6 +58,9 @@ export default async function PublicPhotosPage({
           <ButtonLink href="/photographers" variant="outline">
             Meet the photographers
           </ButtonLink>
+          <ButtonLink href="/nonprofits" variant="outline">
+            See the nonprofits
+          </ButtonLink>
         </div>
       </header>
 

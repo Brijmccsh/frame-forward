@@ -1,6 +1,10 @@
 import { BRAND } from "@/lib/brand";
 import { siteUrl } from "@/lib/site";
-import type { PublicPhoto, PublicPhotographer } from "@/lib/queries/public";
+import type {
+  PublicNonprofit,
+  PublicPhoto,
+  PublicPhotographer,
+} from "@/lib/queries/public";
 
 /**
  * Structured data. This is what lets Google show the site as an organisation,
@@ -157,6 +161,55 @@ export function photographerListJsonLd(photographers: PublicPhotographer[]) {
       position: index + 1,
       url: `${base}/photographers/${photographer.slug}`,
       name: photographer.name ?? "Student photographer",
+    })),
+  };
+}
+
+/**
+ * A nonprofit's profile. Its own @id keeps it distinct from Frame Forward's
+ * Organization, and memberOf ties it back to the platform the way a
+ * photographer's Person does.
+ */
+export function nonprofitJsonLd(nonprofit: PublicNonprofit) {
+  const base = siteUrl();
+  const url = `${base}/nonprofits/${nonprofit.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${url}#organization`,
+    name: nonprofit.org_name ?? "Nonprofit",
+    url,
+    logo: nonprofit.avatar_url ?? undefined,
+    image: nonprofit.cover_url ?? undefined,
+    description: nonprofit.mission ?? undefined,
+    location: nonprofit.location ?? undefined,
+    sameAs: nonprofit.website ? [nonprofit.website] : undefined,
+    memberOf: { "@id": `${base}/#organization` },
+  };
+}
+
+/**
+ * The nonprofit directory as an ItemList. Each entry is the same Organization
+ * its profile page declares, joined by @id so the graph stays one graph.
+ */
+export function nonprofitListJsonLd(nonprofits: PublicNonprofit[]) {
+  const base = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    url: `${base}/nonprofits`,
+    name: "Nonprofits",
+    numberOfItems: nonprofits.length,
+    isPartOf: { "@id": `${base}/#website` },
+    itemListElement: nonprofits.map((nonprofit, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Organization",
+        "@id": `${base}/nonprofits/${nonprofit.slug}#organization`,
+        name: nonprofit.org_name ?? "Nonprofit",
+        url: `${base}/nonprofits/${nonprofit.slug}`,
+      },
     })),
   };
 }

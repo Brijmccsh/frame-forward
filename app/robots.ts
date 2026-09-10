@@ -10,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         "/photos",
         "/photo",
         "/photographers",
+        "/nonprofits",
         /**
          * `Disallow: /app` below is a prefix match, so it also swallows
          * /apple-icon.png (app/apple-icon.png). Crawlers resolve conflicts by
